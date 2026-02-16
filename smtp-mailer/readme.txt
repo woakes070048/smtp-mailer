@@ -4,7 +4,7 @@ Donate link: https://wphowto.net/
 Tags: email, mail, smtp, phpmailer
 Requires at least: 6.9
 Tested up to: 6.9
-Stable tag: 1.1.24
+Stable tag: 1.1.25
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,9 @@ none
 none
 
 == Changelog ==
+
+= 1.1.25 =
+* Added security for debug output.
 
 = 1.1.24 =
 * WordPress 6.9 compatibility update.

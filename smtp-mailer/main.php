@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.24
+Version: 1.1.25
 Requires at least: 6.9
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.24';
+    var $plugin_version = '1.1.25';
     var $phpmailer_version = '7.0.0';
     var $plugin_url;
     var $plugin_path;
@@ -911,9 +911,11 @@ function smtp_mailer_pre_wp_mail($null, $atts)
     $phpmailer->SMTPAutoTLS = false;
     //enable debug when sending a test mail
     if(isset($_POST['smtp_mailer_send_test_email'])){
-        $phpmailer->SMTPDebug = 4;
-        // Ask for HTML-friendly debug output
-        $phpmailer->Debugoutput = 'html';
+        if(is_admin() && current_user_can('manage_options')){
+            $phpmailer->SMTPDebug = 4;
+            // Ask for HTML-friendly debug output
+            $phpmailer->Debugoutput = 'html';
+        }
     }
 
     //disable ssl certificate verification if checked
