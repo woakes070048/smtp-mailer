@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: SMTP Mailer
-Version: 1.1.25
-Requires at least: 6.9
+Version: 1.1.26
+Requires at least: 7.0
 Plugin URI: https://wphowto.net/smtp-mailer-plugin-for-wordpress-1482
 Author: naa986
 Author URI: https://wphowto.net/
@@ -17,8 +17,8 @@ if (!defined('ABSPATH')){
 
 class SMTP_MAILER {
     
-    var $plugin_version = '1.1.25';
-    var $phpmailer_version = '7.0.0';
+    var $plugin_version = '1.1.26';
+    var $phpmailer_version = '7.0.2';
     var $plugin_url;
     var $plugin_path;
     
@@ -999,7 +999,8 @@ function smtp_mailer_pre_wp_mail($null, $atts)
                      * @since 6.9.0
                      *
                      * @param array $args {
-                     *     An array of arguments for `addEmbeddedImage()`.
+                     *     An array of arguments for PHPMailer's addEmbeddedImage() method.
+                     *
                      *     @type string $path        The path to the file.
                      *     @type string $cid         The Content-ID of the image. Default: The key in the embeds array.
                      *     @type string $name        The filename of the image.
@@ -1044,7 +1045,7 @@ function smtp_mailer_pre_wp_mail($null, $atts)
      */
     do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
 
-    $mail_data = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
+    $mail_data = compact( 'to', 'subject', 'message', 'headers', 'attachments', 'embeds' );
 
     // Send!
     try {
@@ -1058,9 +1059,10 @@ function smtp_mailer_pre_wp_mail($null, $atts)
              * process the request without any errors.
              *
              * @since 5.9.0
+             * @since 6.9.0 The `$embeds` element was added to the `$mail_data` array.
              *
              * @param array $mail_data {
-             *     An array containing the email recipient(s), subject, message, headers, and attachments.
+             *     An array containing the email recipient(s), subject, message, headers, attachments, and embeds.
              *
              *     @type string[] $to          Email addresses to send message.
              *     @type string   $subject     Email subject.
@@ -1077,12 +1079,12 @@ function smtp_mailer_pre_wp_mail($null, $atts)
             $mail_data['phpmailer_exception_code'] = $e->getCode();
 
             /**
-             * Fires after a PHPMailer\PHPMailer\Exception is caught.
+             * Fires after a PHPMailer exception is caught.
              *
              * @since 4.4.0
              *
              * @param WP_Error $error A WP_Error object with the PHPMailer\PHPMailer\Exception message, and an array
-             *                        containing the mail recipient, subject, message, headers, and attachments.
+             *                        containing the mail recipient, subject, message, headers, attachments, and embeds.
              */
             do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_data ) );
 
